@@ -50,8 +50,13 @@ app.get('/set-session', (req, res) => {
   res.send('Session set for username');
 });
 
-app.get('/submit-form',(req,res)=>{
-    req.session.username = 
+// app.get('/submit-form',(req,res)=>{
+    
+// Route for handling form submissions
+app.post('/submit-form', (req, res) => {
+    const { name } = req.body;
+    res.send(`Hello, ${name}!`);
+    req.session.username = name; 
 })
 
 // Example route to access session value
