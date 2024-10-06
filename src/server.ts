@@ -2,8 +2,10 @@ import express from 'express';
 import session from 'express-session';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
+import bodyParser from 'body-parser';
 
 const app = express();
+app.use(bodyParser.urlencoded({ extended: true }));
 //sudo mongod --fork --logpath /var/log/mongodb.log --dbpath /var/lib/mongodb
 const mongoUrl = 'mongodb://localhost:27017/my-session-db'; // Replace with your MongoDB URL
 mongoose.connect(mongoUrl)
@@ -54,8 +56,8 @@ app.get('/set-session', (req, res) => {
 // Route for handling form submissions
 app.post('/submit-form', (req, res) => {
     const { name } = req.body;
-    res.send(`Hello, ${name}!`);
     req.session.username = name; 
+    res.send(`Hello, ${name}!<br><a href='./'>home</a>`);
 })
 
 // Example route to access session value
