@@ -47,7 +47,6 @@ app.get('/set-session', (req, res) => {
       <button type="submit">Submit</button>
     </form>
   `);
-  res.send('Session set for username');
 });
 
 // app.get('/submit-form',(req,res)=>{
