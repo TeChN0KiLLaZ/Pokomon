@@ -3,6 +3,8 @@ import session from 'express-session';
 import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 import bodyParser from 'body-parser';
+import authRoutes from './routes/auth'
+
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -30,49 +32,12 @@ app.use(session({
     collectionName: 'sessions',  // Optional, defaults to 'sessions'
   })
 }));
+app.use('/', authRoutes);
 
-app.get('/', (req, res)=>{
-    res.send(`
-    <a href='./set-session'>set</a>
-    <a href='./get-session'>get</a>
-    <a href='./unset-session'>unset</a>
-        `)
-})
-
-// Example route to set a session value
-app.get('/set-session', (req, res) => {
-//   req.session.username = 'JohnDoe'; // Set a session variable
-  res.send(`
-    <form action="/submit-form" method="POST">
-      <label for="name">Name:</label>
-      <input type="text" id="name" name="name" required>
-      <button type="submit">Submit</button>
-    </form>
-  `);
-});
-
-// app.get('/submit-form',(req,res)=>{
-    
-// Route for handling form submissions
-app.post('/submit-form', (req, res) => {
-    const { name } = req.body;
-    req.session.username = name; 
-    res.send(`Hello, ${name}!<br><a href='./'>home</a>`);
-})
-
-// Example route to access session value
-app.get('/get-session', (req, res) => {
-  const username = req.session?.username??'nameless';
-  res.send(`Session Username: ${username}`);
-});
-
-app.get('/unset-session', (req,res)=>{
-    delete req.session.username;
-    res.send('deleted yo')
-})
 
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
+
