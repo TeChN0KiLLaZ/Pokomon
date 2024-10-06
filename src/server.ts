@@ -39,9 +39,20 @@ app.get('/', (req, res)=>{
 
 // Example route to set a session value
 app.get('/set-session', (req, res) => {
-  req.session.username = 'JohnDoe'; // Set a session variable
+//   req.session.username = 'JohnDoe'; // Set a session variable
+  res.send(`
+    <form action="/submit-form" method="POST">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" required>
+      <button type="submit">Submit</button>
+    </form>
+  `);
   res.send('Session set for username');
 });
+
+app.get('/submit-form',(req,res)=>{
+    req.session.username = 
+})
 
 // Example route to access session value
 app.get('/get-session', (req, res) => {
