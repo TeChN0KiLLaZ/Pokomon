@@ -4,6 +4,7 @@ import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 
 const app = express();
+//sudo mongod --fork --logpath /var/log/mongodb.log --dbpath /var/lib/mongodb
 const mongoUrl = 'mongodb://localhost:27017/my-session-db'; // Replace with your MongoDB URL
 mongoose.connect(mongoUrl)
   .then(() => {
