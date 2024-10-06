@@ -28,6 +28,14 @@ app.use(session({
   })
 }));
 
+app.get('/', (req, res)=>{
+    res.send(`
+    <a href='./set-session'>set</a>
+    <a href='./get-session'>get</a>
+    <a href='./unset-session'>unset</a>
+        `)
+})
+
 // Example route to set a session value
 app.get('/set-session', (req, res) => {
   req.session.username = 'JohnDoe'; // Set a session variable
@@ -36,9 +44,14 @@ app.get('/set-session', (req, res) => {
 
 // Example route to access session value
 app.get('/get-session', (req, res) => {
-  const username = req.session?.username;
+  const username = req.session?.username??'nameless';
   res.send(`Session Username: ${username}`);
 });
+
+app.get('/unset-session', (req,res)=>{
+    delete req.session.username;
+    res.send('deleted yo')
+})
 
 // Start the server
 const PORT = 3000;
