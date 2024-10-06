@@ -1,21 +1,20 @@
 import express, { Request, Response } from 'express';
 
 const app = express();
-const PORT = 3000;
+const port = 3000;
 
+// Serve static HTML files (for the form)
+app.use(express.static('public'));
 
-let i = 0;
+// Route to handle form submission via GET
+app.get('/submit-form', (req: Request, res: Response) => {
+    // Access query parameters from the request object
+    const { name, email } = req.query;
 
-// Basic route
-app.get('/', (req: Request, res: Response) => {
-  res.send(`Hello, TypeScript with ESNext on Node.js!${i++}`);
+    // Simple response back with the submitted data
+    res.send(`Received form submission: Name - ${name}, Email - ${email}`);
 });
 
-app.get('/bat', (req: Request, res: Response) => {
-  res.send(`Hello, Bat with ESNext on Node.js!${i++}`);
-});
-
-// Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
 });
