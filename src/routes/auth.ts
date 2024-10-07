@@ -63,7 +63,7 @@ router.post('/login-be', async (req: Request, res: Response): Promise<void> => {
   ;
 });
 
-router.post('/logout',(req,res)=>{
+router.get('/logout',(req,res)=>{
     req.session.destroy((err) => {
         if (err) {
           // If there is an error destroying the session, handle it
