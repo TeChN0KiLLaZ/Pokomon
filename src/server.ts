@@ -9,6 +9,7 @@ import authRoutes from './routes/auth'
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 //sudo mongod --fork --logpath /var/log/mongodb.log --dbpath /var/lib/mongodb
+app.use(express.static('public'));
 const mongoUrl = 'mongodb://localhost:27017/my-session-db'; // Replace with your MongoDB URL
 mongoose.connect(mongoUrl)
   .then(() => {

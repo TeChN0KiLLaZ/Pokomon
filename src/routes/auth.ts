@@ -1,12 +1,12 @@
 // src/routes/auth.ts
-import { Router, Request, Response } from 'express';
+import express, { Router, Request, Response } from 'express';
 import User from '../models/User';
 import { hashPassword, comparePassword } from '../utils/passwordUtils';
 
 const router = Router();  // Ensure you're using Router() correctly
-
+router.use(express.static('public'));
 // Register Route
-router.post('/register', async (req: Request, res: Response): Promise<void> => {
+router.post('/register-be', async (req: Request, res: Response): Promise<void> => {
   const { username, password } = req.body;
 
   try {
@@ -36,8 +36,9 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
 });
 
 // Login Route
-router.post('/login', async (req: Request, res: Response): Promise<void> => {
+router.post('/login-be', async (req: Request, res: Response): Promise<void> => {
   const { username, password } = req.body;
+  
 
   try {
     // Check if the user exists
@@ -54,33 +55,59 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    req.session.username = user.username;
     res.status(200).json({ message: 'Login successful!' });
   } catch (error) {
     res.status(500).json({ message: 'Server error', error });
   }
+  ;
 });
 
-
-router.get('/', (req, res)=>{
-    res.send(`
-    <a href='./set-session'>set</a>
-    <a href='./get-session'>get</a>
-    <a href='./unset-session'>unset</a>
-    <br />
-    <a href='./rock'>rock</a>
-    <a href='./rock2'>rock2</a>
-    <br />
-    <a href='./login'>login</a>
-    <a href='./logout'>logout</a>
-    <a href='./register'>register</a>
-        `)
+router.post('/logout',(req,res)=>{
+    req.session.destroy((err) => {
+        if (err) {
+          // If there is an error destroying the session, handle it
+          console.log(err);
+          return res.status(500).send('Something went wrong while logging out.');
+        }
+    
+        // Clear the session cookie
+        res.clearCookie('connect.sid');
+    
+        // Redirect the user to the login page (or homepage)
+        res.redirect('/login');  
+    })
 })
 
+
+// router.get('/', (req, res)=>{
+//     res.send(`
+//     <a href='./set-session'>set</a>
+//     <a href='./get-session'>get</a>
+//     <a href='./unset-session'>unset</a>
+//     <br />
+//     <a href='./rock'>rock</a>
+//     <a href='./rock2'>rock2</a>
+//     <br />
+//     <a href='./login'>login</a>
+//     <a href='./logout'>logout</a>
+//     <a href='./register'>register</a>
+//         `)
+// })
+router.get('/api/user', (req, res) => {
+    console.log(req.session)
+    if (req.session.username) {
+      res.json({ username: req.session.username });
+    } else {
+      res.json({ username: null });
+    }
+  });
+  
 // Example route to set a session value
-router.get('/rock', (req, res) => {
+router.get('/register', (req, res) => {
     //   req.session.username = 'JohnDoe'; // Set a session variable
       res.send(`
-        <form action="/register" method="POST">
+        <form action="/register-be" method="POST">
           <label for="username">Name:</label>
           <input type="text" id="username" name="username" required>
           <label for="password">Password:</label>
@@ -90,10 +117,10 @@ router.get('/rock', (req, res) => {
       `);
     });
 
-router.get('/rock2', (req, res) => {
+router.get('/login', (req, res) => {
 //   req.session.username = 'JohnDoe'; // Set a session variable
     res.send(`
-    <form action="/login" method="POST">
+    <form action="/login-be" method="POST">
         <label for="username">Name:</label>
         <input type="text" id="username" name="username" required>
         <label for="password">Password:</label>
