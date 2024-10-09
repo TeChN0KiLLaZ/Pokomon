@@ -4,7 +4,8 @@ import mongoose from 'mongoose';
 import MongoStore from 'connect-mongo';
 
 const app = express();
-const mongoUrl = 'mongodb://localhost:27017/my-session-db'; // Replace with your MongoDB URL
+const mongoUrl = 'mongodb://localhost:27017/my-session-db2'; // Replace with your MongoDB URL
+//mongod --dbpath /path/to/dbdir --logpath /path/to/mongodb.log --fork
 mongoose.connect(mongoUrl)
   .then(() => {
     console.log('Connected to MongoDB');
@@ -15,7 +16,7 @@ mongoose.connect(mongoUrl)
 
 // Session configuration using MongoDB
 app.use(session({
-  secret: 'your-secret-key', // Use a strong secret in production
+  secret: 'your-secret-key2', // Use a strong secret in production
   resave: false,             // Avoid resaving sessions that haven't changed
   saveUninitialized: false,  // Don't save uninitialized sessions
   cookie: { 
